@@ -22,32 +22,22 @@ namespace BubenBot
         private CommandService _commands;
         private IServiceProvider _services;
         private Config _config;
-        private LavaNode _instanceOfLavaNode;
-        private LavaConfig _instanceOfLavaConfig;
+
 
         public async Task RunBotAsync()
         {
             _client = new DiscordSocketClient();
             _commands = new CommandService();
             _config = new Config();
-            _instanceOfLavaConfig = new LavaConfig();
-            _instanceOfLavaNode = new LavaNode(_client, _instanceOfLavaConfig);
 
             _services = new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
-                .AddSingleton<LavaNode>()
-                .AddSingleton<LavaConfig>()
-                .AddLavaNode(x => {
-                    x.SelfDeaf = false;
-                })
                 .BuildServiceProvider();
 
             await InitializeConfigDataAsync();
 
             _client.Log += _client_Log;
-
-            _client.Ready += OnReadyAsync;
 
             await RegisterCommandsAsync();
 
@@ -65,18 +55,6 @@ namespace BubenBot
         {
             Console.WriteLine(arg);
             return Task.CompletedTask;
-        }
-
-        private async Task OnReadyAsync()
-        {
-            // Avoid calling ConnectAsync again if it's already connected 
-            // (It throws InvalidOperationException if it's already connected).
-            if (!_instanceOfLavaNode.IsConnected)
-            {
-                await _instanceOfLavaNode.ConnectAsync();
-            }
-
-            // Other ready related stuff
         }
 
         public async Task RegisterCommandsAsync()
