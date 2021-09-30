@@ -16,7 +16,6 @@ namespace BubenBot
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
-        private readonly LavaNode _lavaNode;
         string printString = "";
         Random rand = new Random();
         string TargetName = Config.ConfigProperties.TargetUserName;
@@ -32,12 +31,6 @@ namespace BubenBot
                 "age",
                 "echo",
             };
-
-
-        public Commands(LavaNode lavaNode)
-        {
-            _lavaNode = lavaNode;
-        }
 
         [Command("help")]
         [Remarks("Help")]
@@ -233,32 +226,5 @@ namespace BubenBot
             return;
         }
 
-
-        [Command("Join")]
-        public async Task JoinAsync()
-        {
-            if (_lavaNode.HasPlayer(Context.Guild))
-            {
-                await ReplyAsync("I'm already connected to a voice channel!");
-                return;
-            }
-
-            var voiceState = Context.User as IVoiceState;
-            if (voiceState?.VoiceChannel == null)
-            {
-                await ReplyAsync("You must be connected to a voice channel!");
-                return;
-            }
-
-            try
-            {
-                await _lavaNode.JoinAsync(voiceState.VoiceChannel, Context.Channel as ITextChannel);
-                await ReplyAsync($"Joined {voiceState.VoiceChannel.Name}!");
-            }
-            catch (Exception exception)
-            {
-                await ReplyAsync(exception.Message);
-            }
-        }
     }
 }
