@@ -225,6 +225,15 @@ namespace BubenBot
             await ReplyAsync("done");
             return;
         }
+        
+        //Testing Commits in GitHub
+        [Command("test")]
+        public async Task TestGH()
+        {
+
+            await ReplyAsync("This is a test 4 GitHub");
+
+        }
 
 
     }
