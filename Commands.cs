@@ -28,7 +28,8 @@ namespace BubenBot
 
         public async Task InitializeVoiceLinesFolder()
         {
-            if (!File.Exists(voiceLinesPath))
+
+            if (!Directory.Exists(voiceLinesPath))
             {
                 Directory.CreateDirectory(voiceLinesPath);
                 await LoggingService.LogAsync(new Discord.LogMessage(LogSeverity.Error, "Source", "No VoiceLines Folder found! A new one was generated"));
